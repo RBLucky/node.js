@@ -8,6 +8,10 @@ const app = express();
 
 // Set up GET route for "/"
 app.get("/", (req, res) => {
+    console.log(req.params);
+    console.log(req.body);
+    console.log(req.url);
+    console.log(req.query);
     res.send("Hello, Universe!");
 })
 
