@@ -1,17 +1,19 @@
 const port = 3000;
 const http = require("http");
 const httpStatus = require("http-status-codes");
-const app = http.createServer();
+const app = http.createServer(); // create a server object
 
 const getJSONString = obj => {
     return JSON.stringify(obj, null, 2);
 };
 
-app.on("request", (req, res) => {
+// Runs everytime a response is made
+app.on("request", (req, res) => { //Listens for requests
     var body = [];
+    
     req.on("data", (bodyData) => {
         body.push(bodyData);
-    });
+    }); // Prepares a response
 
     req.on("end", () => {
         body = Buffer.concat(body).toString();
