@@ -11,13 +11,14 @@ const dbName = "recipe_db";
 // database connection
 MongoDB.connect(dbURL, (error, client) => {
     if (error) throw error;
-    let db = client.db(dbName);
+
+    let db = client.db(dbName); //recipe_db
     console.log(`Successfully connected to ${dbName}`);
 
-    // insert
+    // insert into our collection
     db.collection("contacts")
     .insert({
-        name: "Test",
+        name: "Test2",
         email: "test@email.com"
     }, (error, db) => {
         if (error) throw error;
@@ -26,14 +27,14 @@ MongoDB.connect(dbURL, (error, client) => {
 
     db.collection("contacts")
     .insert({
-        name: "Freddie Mercury",
-        email: "fred@queen.com"
+        name: "Brian May",
+        email: "brian@queen.com"
     }, (error, db) => {
         if (error) throw error;
         console.log(db);
     });
 
-    // find 
+    // find contacts & print to console as array
     db.collection("contacts")
     .find()
     .toArray((error, data) => {
@@ -60,7 +61,7 @@ app.use((req, res, next) => {
     next();
 });
 
-// requests
+// handling requests
 // app.get("/name", homeController.respondWithName);
 app.get("/name/:myName", homeController.respondWithName);
 app.get("/items/:vegetable", homeController.sendReqParam);
