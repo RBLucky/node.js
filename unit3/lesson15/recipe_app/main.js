@@ -110,7 +110,7 @@ app.get("/items/:vegetable", homeController.sendReqParam);
 
 app.get("/subscribers", subscribersController.getAllSubscribers, (req, res, next) => {
     console.log(req.data);
-    res.send(req.data);
+    res.render("subscribers", {subscribers: req.data});
 });
 
 app.post("/", (req, res) => {
