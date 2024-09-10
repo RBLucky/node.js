@@ -3,45 +3,45 @@ const app = express();
 const homeController = require("./controllers/homeController");
 const layouts = require("express-ejs-layouts");
 const errorController = require("./controllers/errorController");
-const MongoDB = require("mongodb").MongoClient;
+const mongoose = require("mongoose");
+const Subscriber = require("./models/subscriber");
 
-const dbURL = "mongodb://localhost:27017";
-const dbName = "recipe_db";
+// Set up the connection
+// to your database.
+mongoose.connect(
+    "mongodb://localhost:27017/recipe_db",
+{useNewUrlParser: true}
+);
 
-// database connection
-MongoDB.connect(dbURL, (error, client) => {
-    if (error) throw error;
 
-    let db = client.db(dbName); //recipe_db
-    console.log(`Successfully connected to ${dbName}`);
+// Assign the database
+// to the db variable.
+const db = mongoose.connection;
 
-    // insert into our collection
-    db.collection("contacts")
-    .insert({
-        name: "Test2",
-        email: "test@email.com"
-    }, (error, db) => {
-        if (error) throw error;
-        console.log(db);
-    });
 
-    db.collection("contacts")
-    .insert({
-        name: "Brian May",
-        email: "brian@queen.com"
-    }, (error, db) => {
-        if (error) throw error;
-        console.log(db);
-    });
-
-    // find contacts & print to console as array
-    db.collection("contacts")
-    .find()
-    .toArray((error, data) => {
-        if (error) throw error;
-        console.log(data);
-    });
+// Log a message when the
+// application connects to
+// the database.
+db.once("open", () => {
+    console.log("Succesfully connected to MongoDB using Mongoose!");
 });
+
+
+/* 
+
+MODELS - In Models Module
+// Create a new schema
+// with mongoose.Schema.
+const subscriberSchema = mongoose.Schema({
+    name: String,
+    email: String,
+    zipCode: Number // Add schema properties.
+});
+
+// Apply Model
+const Subscriber = mongoose.model("Subscriber", subscriberSchema);
+
+*/
 
 
 // middleware configuration
