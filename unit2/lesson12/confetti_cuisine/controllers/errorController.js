@@ -1,6 +1,7 @@
 "use strict";
 
 const httpStatus = require("http-status-codes");
+
 //handles unhandled requests
 exports.pageNotFoundError = (req, res) => {
   let errorCode = httpStatus.NOT_FOUND;

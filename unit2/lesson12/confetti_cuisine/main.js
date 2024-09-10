@@ -19,6 +19,7 @@ app.use(
 );
 app.use(express.json());
 app.use(layouts);
+
 //shows which folder the files that'll be rendered is contained in
 //enables static files
 app.use(express.static("public"));
