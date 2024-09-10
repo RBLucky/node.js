@@ -10,7 +10,7 @@ const Subscriber = require("./models/subscriber");
 // to your database.
 mongoose.connect(
     "mongodb://localhost:27017/recipe_db",
-{useNewUrlParser: true}
+    { useNewUrlParser: true }
 );
 
 
@@ -55,6 +55,47 @@ app.use(
     })
 );
 app.use(express.json());
+
+// Create then save (2-step method)
+/*
+let subscriber1 = new Subscriber({
+    name: "Lucky Nkosi",
+    email: "lucky@nkosi.com"
+});
+
+subscriber1.save((err, savedDoc) => {
+    if (err) console.log(err);
+    console.log(savedDoc);
+});
+*/
+
+// Create and save (1-step method)
+Subscriber.create(
+    {
+        name: "Lucky Nkosi",
+        email: "lucky@nkosi.com"
+    }
+)
+    .then(savedDocument => {
+        console.log(savedDocument);
+    })
+    .catch(error => {
+        console.log(error);
+    });
+
+
+// Running a Query
+let myQuery = Subscriber.findOne({
+    name: "Lucky Nkosi"
+}).exec();
+myQuery
+    .then(docs => {
+        console.log(docs); // Handle the results
+    })
+    .catch(err => {
+        console.error(err); // Handle errors
+    });
+
 
 app.use((req, res, next) => {
     console.log(`request made to: ${req.url}`);

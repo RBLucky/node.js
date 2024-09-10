@@ -1,4 +1,5 @@
 
+const mongoose = require("mongoose");
 // Create a new schema
 // with mongoose.Schema.
 const subscriberSchema = mongoose.Schema({
