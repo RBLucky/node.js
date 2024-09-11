@@ -1,6 +1,6 @@
 "use strict";
 
-let courses = [
+var courses = [
   {
     title: "Event Driven Cakes",
     cost: 50
