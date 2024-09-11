@@ -72,8 +72,8 @@ subscriber1.save((err, savedDoc) => {
 // Create and save (1-step method)
 Subscriber.create(
     {
-        name: "Richard Khuzwayo",
-        email: "richard@khuzwayo.com"
+        name: "Lucky Nkosi",
+        email: "lucky@nkosi.com"
     }
 )
     .then(savedDocument => {
@@ -86,7 +86,7 @@ Subscriber.create(
 
 // Running a Query
 let myQuery = Subscriber.findOne({
-    name: "Richard Khuzwayo"
+    name: "Lucky Nkosi"
 }).exec();
 myQuery
     .then(docs => {
