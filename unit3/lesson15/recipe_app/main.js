@@ -16,6 +16,8 @@ mongoose.connect(
 mongoose.set("useCreateIndex", true);
 const db = mongoose.connection;
 
+mongoose.Promise = global.Promise
+
 db.once("open", () => {
   console.log("Successfully connected to MongoDB using Mongoose!");
 });
@@ -48,6 +50,9 @@ app.get("/subscribers", subscribersController.getAllSubscribers, (req, res, next
   res.render("subscribers", { subscribers: req.data });
   //res.send(req.data);
 });
+
+app.get("/contact", subscribersController.getSubscriptionPage);
+app.post("/subscribe", subscribersController.saveSubscriber);
 
 app.get("/", homeController.index);
 app.get("/courses", homeController.showCourses);
