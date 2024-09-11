@@ -13,7 +13,9 @@ mongoose.connect(
   "mongodb://0.0.0.0:27017/recipe_db",
   { useNewUrlParser: true }
 );
+
 mongoose.set("useCreateIndex", true);
+
 const db = mongoose.connection;
 
 mongoose.Promise = global.Promise
