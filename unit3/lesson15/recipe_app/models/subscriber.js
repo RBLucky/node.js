@@ -1,11 +1,10 @@
+"use strict";
 
-const mongoose = require("mongoose");
-// Create a new schema
-// with mongoose.Schema.
-const subscriberSchema = mongoose.Schema({
+const mongoose = require("mongoose"),
+  subscriberSchema = mongoose.Schema({
     name: String,
     email: String,
-    zipCode: Number // Add schema properties.
-});
+    zipCode: Number
+  });
 
 module.exports = mongoose.model("Subscriber", subscriberSchema);

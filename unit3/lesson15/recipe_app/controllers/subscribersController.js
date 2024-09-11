@@ -3,12 +3,9 @@
 const Subscriber = require("../models/subscriber");
 
 exports.getAllSubscribers = (req, res, next) => {
-    Subscriber.find({})
-        .then(subscribers => {
-            req.data = subscribers;
-            next();
-        })
-        .catch(error => {
-            next(error);
-        })
-}
+  Subscriber.find({}, (error, subscribers) => {
+    if (error) next(error);
+    req.data = subscribers;
+    next();
+  });
+};
