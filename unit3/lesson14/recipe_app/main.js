@@ -9,7 +9,7 @@ const Subscriber = require("./models/subscriber");
 // Set up the connection
 // to your database.
 mongoose.connect(
-    "mongodb://localhost:27017/recipe_db",
+    "mongodb://0.0.0.0:27017/recipe_db",
     { useNewUrlParser: true }
 );
 
