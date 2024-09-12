@@ -15,26 +15,55 @@ var courses = [
   }
 ];
 
-exports.showCourses = (req, res) => {
-  res.render("courses", {
-    offeredCourses: courses
-  });
-};
+// exports.showCourses = (req, res) => {
+//   res.render("courses", {
+//     offeredCourses: courses
+//   });
+// };
 
-exports.index = (req, res) => {
-  res.render("index");
-};
+// exports.index = (req, res) => {
+//   res.render("index");
+// };
 
-exports.logRequestPaths = (req, res, next) => {
-  console.log(`request made to: ${req.url}`);
-  next();
-};
+// exports.logRequestPaths = (req, res, next) => {
+//   console.log(`request made to: ${req.url}`);
+//   next();
+// };
 
-exports.sendReqParam = (req, res) => {
-  let veg = req.params.vegetable;
-  res.send(`This is the page for ${veg}`);
-};
+// exports.sendReqParam = (req, res) => {
+//   let veg = req.params.vegetable;
+//   res.send(`This is the page for ${veg}`);
+// };
 
-exports.respondWithName = (req, res) => {
-  res.render("index");
+// exports.respondWithName = (req, res) => {
+//   res.render("index");
+// };
+
+//Prevents repetitive code
+module.exports = {
+  showCourses: (req, res) => {
+    res.render("courses", {
+      offeredCourses: courses,
+    });
+  },
+  index: (req, res) => {
+    res.render("index");
+  },
+  showSignUp: (req, res) => {
+    res.render("contact");
+  },
+  postedContactForm: (req, res) => {
+    res.render("thanks");
+  },
+  logRequestPaths: (req, res, next) => {
+    console.log(`request made to: ${ req.url }`);
+    next();
+  },
+  sendReqParam: (req, res) => {
+    let veg = req.params.vegetable;
+    res.send(`This is the page for ${ veg }`);
+  },
+  respondWithName: (req, res) => {
+    res.render("index");
+  },
 };

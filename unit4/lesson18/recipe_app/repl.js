@@ -1,66 +1,150 @@
-const mongoose = require("mongoose"),
-  Subscriber = require("./models/subscriber"),
-  Course = require("./models/course");
+const mongoose = require("mongoose");
+const Subscriber = require("./models/subscriber");
+const Course = require("./models/course");
+const User = require("./models/user");
 
-var testCourse, testSubscriber;
+mongoose.connect("mongodb://0.0.0.0:27017/recipe_db", {
+  useNewUrlParser: true,
+});
 
-mongoose.connect(
-  "mongodb://localhost:27017/recipe_db",
-  { useNewUrlParser: true }
-);
 mongoose.Promise = global.Promise;
 
-Subscriber.remove({})
-  .then(items => console.log(`Removed ${items.n} records!`))
-  .then(() => {
-    return Course.remove({});
-  })
-  .then(items => console.log(`Removed ${items.n} records!`))
-  .then(() => {
-    return Subscriber.create({
-      name: "Jon",
-      email: "jon@jonwexler.com",
-      zipCode: "12345"
-    });
-  })
-  .then(subscriber => {
-    console.log(`Created Subscriber: ${subscriber.getInfo()}`);
-  })
-  .then(() => {
+//-----------CREATE NEW SUBSCRIBER---------------
+// Subscriber.create({
+// name: "Lesson17-1",
+// email: "lesson17-1@gmail.com",
+// zipCode: "12345"})
+// .then(subscriber => console.log(subscriber))
+// .catch(error => console.log(error.message));
+
+//-----------TESTING EMAIL VALIDATION--------------
+// Subscriber.create({
+// name: "Lesson__17_1",
+// email: "lesson17-1@gmail.com",
+// zipCode: "12345"})
+// .then(subscriber => console.log(subscriber))
+// .catch(error => console.log(error.message));
+
+//-----------TESTING ZIPCODE VALIDATION-----------
+// Subscriber.create({
+// name: "TestZipCode_2",
+// email: "test_2@zip.com",
+// zipCode: "123"})
+// .then(subscriber => console.log(subscriber))
+// .catch(error => console.log(error.message));
+
+//---------------DATABASE QUERY--------------
+// let subscriber;
+// Subscriber.findOne({
+// name: "Lesson17-1"})
+// .then(result => {
+// subscriber = result;
+// console.log(`${subscriber.getInfo()}`);
+// });
+
+//**********************************************************************/
+
+// async function main() {
+//     try {
+//       // Create a new course
+//       const testCourse2024 = await Course.create({
+//         title: "test2024",
+//         description: "test2024",
+//         zipCode: 12345,
+//         items: ["testItem1", "testItem2"]
+//       });
+
+//       // Find a subscriber
+//       const testSubscriber2024 = await Subscriber.findOne({});
+
+//       if (testSubscriber2024) {
+//         // Ensure courses property is an array
+//         if (!Array.isArray(testSubscriber2024.courses)) {
+//           testSubscriber2024.courses = [];
+//         }
+
+//         // Push course ID to the subscriber's courses array
+//         testSubscriber2024.courses.push(testCourse2024._id);
+
+//         // Save the updated subscriber
+//         await testSubscriber2024.save();
+
+//         // Populate the courses field and log the result
+//         await Subscriber.populate(testSubscriber2024, { path: "courses" });
+//         console.log(testSubscriber2024);
+//       } else {
+//         console.log('Subscriber not found');
+//       }
+//     } catch (error) {
+//       console.error('Error:', error.message);
+//     }
+//   }
+
+//   main();
+
+//*******************************************************************/
+
+//-------------------------CREATING NEW USER------------------
+// let testUser;
+
+// User.create({
+//   name: {
+//     first: "Akhona",
+//     last: "September"
+//   },
+//   email: "akhona2@gmail.com",
+//   password: "pass123"
+//  })
+//   .then(user => {
+//   testUser = user;
+//   console.log(testUser)
+//   })
+//   .catch(error => console.log(error.message));
+
+//-------------------------CONNECTING SUBSCRIBER TO USER------------------
+
+//Create a Subscriber
+Subscriber.create({
+name: "Test User",
+email: "testUser7@gmail.com",
+zipCode: "12345"})
+.then(subscriber => console.log(`Subscriber: ${subscriber}`))
+.catch(error => console.log(error.message));
+
+//Create a User
+let testUser;
+
+User.create({
+  name: {
+    first: "Test",
+    last: "User",
+  },
+  email: "testUser7@gmail.com",
+  password: "testing",
+})
+  .then((user) => {
+    testUser = user;
     return Subscriber.findOne({
-      name: "Jon"
+      email: testUser.email,
     });
   })
-  .then(subscriber => {
-    testSubscriber = subscriber;
-    console.log(`Found one subscriber: ${subscriber.getInfo()}`);
+  .then((subscriber) => {
+    if (subscriber) {
+      // Link the subscriber to the user
+      testUser.subscribedAccount = subscriber._id;  
+      return testUser.save();
+    } else {
+      throw new Error('Subscriber not found');
+    }
   })
-  .then(() => {
-    return Course.create({
-      title: "Tomato Land",
-      description: "Locally farmed tomatoes only",
-      zipCode: 12345,
-      items: ["cherry", "heirloom"]
-    });
+  .then((updatedUser) => {
+    console.log(`Updated User: ${updatedUser}`);
+    console.log("USER UPDATED!");
   })
-  .then(course => {
-    testCourse = course;
-    console.log(`Created course: ${course.title}`);
-  })
-  .then(() => {
-    testSubscriber.courses.push(testCourse);
-    testSubscriber.save();
-  })
-  .then(() => {
-    return Subscriber.populate(testSubscriber, "courses");
-  })
-  .then(subscriber => console.log(subscriber))
-  .then(() => {
-    return Subscriber.find({
-      courses: mongoose.Types.ObjectId(testCourse._id)
-    });
-  })
-  .then(subscriber => console.log(subscriber));
-hen(subscriber =>
-        console.log(subscriber)
-    );
+  .catch((error) => console.log(error.message));
+
+
+
+  
+
+  

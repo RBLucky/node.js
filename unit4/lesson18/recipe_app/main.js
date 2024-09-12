@@ -5,9 +5,11 @@ const express = require("express"),
   errorController = require("./controllers/errorController"),
   homeController = require("./controllers/homeController"),
   subscribersController = require("./controllers/subscribersController"),
+  usersController = require("./controllers/usersController"),
   layouts = require("express-ejs-layouts"),
   mongoose = require("mongoose"),
-  Subscriber = require("./models/subscriber");
+  Subscriber = require("./models/subscriber"),
+  User = require("./models/user");
 
 mongoose.Promise = global.Promise;
 
@@ -32,6 +34,7 @@ app.use(
     extended: false
   })
 );
+
 app.use(express.json());
 app.use(homeController.logRequestPaths);
 
@@ -47,6 +50,8 @@ app.get("/courses", homeController.showCourses);
 
 app.get("/contact", subscribersController.getSubscriptionPage);
 app.post("/subscribe", subscribersController.saveSubscriber);
+
+app.get("/users", usersController.index);
 
 app.use(errorController.logErrors);
 app.use(errorController.respondNoResourceFound);

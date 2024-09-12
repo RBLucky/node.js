@@ -33,3 +33,10 @@ const userSchema = new Schema({
     // Tracks creation/Update time
     timestamps: true
 });
+
+// Returns first and last name
+userSchema.virtual("fullName").get(function() {
+    return `${this.name.first} ${this.name.last}`;
+});
+
+module.exports = mongoose.model("User", userSchema);
