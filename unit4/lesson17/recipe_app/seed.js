@@ -12,17 +12,17 @@ mongoose.connection;
 var contacts = [
   {
     name: "Jon Wexler",
-    email: "jon@jonwexler.com",
+    email: "jon1@jonwexler.com",
     zipCode: 10016
   },
   {
     name: "Chef Eggplant",
-    email: "eggplant@recipeapp.com",
+    email: "eggplant1@recipeapp.com",
     zipCode: 20331
   },
   {
     name: "Professor Souffle",
-    email: "souffle@recipeapp.com",
+    email: "souffle1@recipeapp.com",
     zipCode: 19103
   }
 ];

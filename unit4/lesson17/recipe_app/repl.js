@@ -5,7 +5,7 @@ const mongoose = require("mongoose"),
 var testCourse, testSubscriber;
 
 mongoose.connect(
-  "mongodb://localhost:27017/recipe_db",
+  "mongodb://0.0.0.0:27017/recipe_db",
   { useNewUrlParser: true }
 );
 mongoose.Promise = global.Promise;
@@ -61,6 +61,3 @@ Subscriber.remove({})
     });
   })
   .then(subscriber => console.log(subscriber));
-hen(subscriber =>
-        console.log(subscriber)
-    );

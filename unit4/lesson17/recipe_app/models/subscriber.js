@@ -14,7 +14,7 @@ const subscriberSchema = new mongoose.Schema({
   },
   zipCode: {
     type: Number,
-    min: [10000, "Zip code too short"],
+    min: [10000, "Zip code too short. Must be 5 digits."],
     max: 99999
   },
   courses: [{ type: mongoose.Schema.Types.ObjectId, ref: "Course" }]
