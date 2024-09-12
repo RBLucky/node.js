@@ -5,7 +5,7 @@ const userSchema = new Schema({
     name: {
         first: {
             type: String,
-            trim: true
+            trim: true // Remove whitespace
         },
         last: {
             type: String,
@@ -18,7 +18,7 @@ const userSchema = new Schema({
         lowercase: true,
         unique: true
     },
-    zipCode: {
+    zipCode: { // Must be 5 digits
         type: Number,
         min: [1000, "Zip code too short"],
         max: 99999
@@ -30,5 +30,6 @@ const userSchema = new Schema({
     courses: [{ type: Schema.Types.ObjectId, ref: "Course" }],
     subscribedAccount: { type: Schema.Types.ObjectId, ref: "Subscriber" }
 }, {
+    // Tracks creation/Update time
     timestamps: true
 });
