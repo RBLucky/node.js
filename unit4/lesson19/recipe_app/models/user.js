@@ -1,42 +1,67 @@
+"use strict";
 
-const mongoose = require("mongoose");
-const { Schema } = mongoose; // Not own package but a feature
-const userSchema = new Schema({
-    name: {
+const mongoose = require("mongoose"),
+  { Schema } = mongoose,
+  Subscriber = require("./subscriber"),
+  userSchema = new Schema(
+    {
+      name: {
         first: {
-            type: String,
-            trim: true // Remove whitespace
+          type: String,
+          trim: true
         },
         last: {
-            type: String,
-            trim: true
+          type: String,
+          trim: true
         }
-    },
-    email: {
+      },
+      email: {
         type: String,
         required: true,
         lowercase: true,
         unique: true
-    },
-    zipCode: { // Must be 5 digits
+      },
+      zipCode: {
         type: Number,
         min: [1000, "Zip code too short"],
         max: 99999
-    },
-    password: {
+      },
+      password: {
         type: String,
         required: true
+      },
+      courses: [{ type: Schema.Types.ObjectId, ref: "Course" }],
+      subscribedAccount: {
+        type: Schema.Types.ObjectId,
+        ref: "Subscriber"
+      }
     },
-    courses: [{ type: Schema.Types.ObjectId, ref: "Course" }],
-    subscribedAccount: { type: Schema.Types.ObjectId, ref: "Subscriber" }
-}, {
-    // Tracks creation/Update time
-    timestamps: true
+    {
+      timestamps: true
+    }
+  );
+
+userSchema.virtual("fullName").get(function() {
+  return `${this.name.first} ${this.name.last}`;
 });
 
-// Returns first and last name
-userSchema.virtual("fullName").get(function() {
-    return `${this.name.first} ${this.name.last}`;
+userSchema.pre("save", function(next) {
+  let user = this;
+  if (user.subscribedAccount === undefined) {
+    Subscriber.findOne({
+      email: user.email
+    })
+      .then(subscriber => {
+        user.subscribedAccount = subscriber;
+        next();
+      })
+      .catch(error => {
+        console.log(`Error in connecting subscriber:${error.message}`);
+        next(error);
+      });
+  } else {
+    next();
+  }
 });
 
 module.exports = mongoose.model("User", userSchema);

@@ -2,15 +2,15 @@
 
 const express = require("express"),
   app = express(),
+  router = express.Router(),
+  layouts = require("express-ejs-layouts"),
+  mongoose = require("mongoose"),
   errorController = require("./controllers/errorController"),
   homeController = require("./controllers/homeController"),
   subscribersController = require("./controllers/subscribersController"),
   usersController = require("./controllers/usersController"),
-  layouts = require("express-ejs-layouts"),
-  mongoose = require("mongoose"),
-  Subscriber = require("./models/subscriber"),
-  User = require("./models/user");
-
+  coursesController = require("./controllers/coursesController"),
+  Subscriber = require("./models/subscriber");
 mongoose.Promise = global.Promise;
 
 mongoose.connect(
@@ -18,6 +18,7 @@ mongoose.connect(
   { useNewUrlParser: true }
 );
 mongoose.set("useCreateIndex", true);
+
 const db = mongoose.connection;
 
 db.once("open", () => {
@@ -27,35 +28,46 @@ db.once("open", () => {
 app.set("port", process.env.PORT || 3000);
 app.set("view engine", "ejs");
 
-app.use(express.static("public"));
-app.use(layouts);
-app.use(
+router.use(express.static("public"));
+router.use(layouts);
+router.use(
   express.urlencoded({
     extended: false
   })
 );
 
-app.use(express.json());
-app.use(homeController.logRequestPaths);
+router.use(express.json());
+router.use(homeController.logRequestPaths);
 
-app.get("/name", homeController.respondWithName);
-app.get("/items/:vegetable", homeController.sendReqParam);
+router.get("/", homeController.index);
+router.get("/contact", homeController.getSubscriptionPage);
 
-app.get("/subscribers", subscribersController.getAllSubscribers, (req, res, next) => {
-  res.render("subscribers", { subscribers: req.data });
-});
+router.get("/users", usersController.index, usersController.indexView);
+router.get("/users/new", usersController.new);
+router.post("/users/create", usersController.create, usersController.redirectView);
+router.get("/users/:id", usersController.show, usersController.showView);
 
-app.get("/", homeController.index);
-app.get("/courses", homeController.showCourses);
+router.get("/subscribers", subscribersController.index, subscribersController.indexView);
+router.get("/subscribers/new", subscribersController.new);
+router.post(
+  "/subscribers/create",
+  subscribersController.create,
+  subscribersController.redirectView
+);
+router.get("/subscribers/:id", subscribersController.show, subscribersController.showView);
 
-app.get("/contact", subscribersController.getSubscriptionPage);
-app.post("/subscribe", subscribersController.saveSubscriber);
+router.get("/courses", coursesController.index, coursesController.indexView);
+router.get("/courses/new", coursesController.new);
+router.post("/courses/create", coursesController.create, coursesController.redirectView);
+router.get("/courses/:id", coursesController.show, coursesController.showView);
 
-app.get("/users", usersController.index);
+router.post("/subscribe", subscribersController.saveSubscriber);
 
-app.use(errorController.logErrors);
-app.use(errorController.respondNoResourceFound);
-app.use(errorController.respondInternalError);
+router.use(errorController.logErrors);
+router.use(errorController.respondNoResourceFound);
+router.use(errorController.respondInternalError);
+
+app.use("/", router);
 
 app.listen(app.get("port"), () => {
   console.log(`Server running at http://localhost:${app.get("port")}`);
