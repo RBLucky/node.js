@@ -1,3 +1,4 @@
+"use strict";
 
 const User = require("../models/user");
 
@@ -95,6 +96,18 @@ module.exports = {
       .catch(error => {
         console.log(`Error updating user by ID: ${error.message}`);
         next(error);
+      });
+  },
+  delete: (req, res, next) => {
+    let userId = req.params.id;
+    User.findByIdAndRemove(userId)
+      .then(() => {
+        res.locals.redirect = "/users";
+        next();
+      })
+      .catch(error => {
+        console.log(`Error deleting user by ID: ${error.message}`);
+        next();
       });
   }
 };

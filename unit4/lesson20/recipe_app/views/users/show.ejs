@@ -36,14 +36,14 @@
   <% } %>
 
     <span>
-      <a class="button btn btn-outline-primary" href="/users">View all users</a>
+      <a class="button" style="text-decoration: none;" href="/users">View all users</a>
 
 
-      <a class="button btn btn-outline-primary" href="<%=`/users/${user._id}/edit`%>">
+      <a class="button" style="text-decoration: none;" href="<%=`/users/${user._id}/edit`%>">
         Edit User Details
       </a>
 
 
-      <a class="button btn bt-outline-danger" href="<%= `/users/${user._id}/delete?_method=DELETE` %>"
+      <a class="button" style="text-decoration: none;" href="<%= `/users/${user._id}/delete?_method=DELETE` %>"
         onclick="return confirm('Are you sure you want to delete this record?')">Delete</a>
     </span>

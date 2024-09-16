@@ -1,4 +1,6 @@
-<h1 class="center">Course Data for <%= course.title %></h1>
+<h1 class="center">Course Data for
+  <%= course.title %>
+</h1>
 
 <table class="table">
   <tr>
@@ -26,3 +28,16 @@
     </td>
   </tr>
 </table>
+
+<span>
+  <a class="button" style="text-decoration: none;" href="/courses">View all users</a>
+
+
+  <a class="button" style="text-decoration: none;" href="<%=`/courses/${course._id}/edit`%>">
+    Edit Course Details
+  </a>
+
+
+  <a class="button" style="text-decoration: none;" href="<%= `/courses/${course._id}/delete?_method=DELETE` %>"
+    onclick="return confirm('Are you sure you want to delete this record?')">Delete</a>
+</span>
