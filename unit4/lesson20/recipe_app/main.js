@@ -50,6 +50,7 @@ router.use(homeController.logRequestPaths);
 router.get("/", homeController.index);
 router.get("/contact", homeController.getSubscriptionPage);
 
+// Users
 router.get("/users", usersController.index, usersController.indexView);
 router.get("/users/new", usersController.new);
 router.post("/users/create", usersController.create, usersController.redirectView);
@@ -58,6 +59,7 @@ router.put("/users/:id/update", usersController.update, usersController.redirect
 router.delete("/users/:id/delete", usersController.delete, usersController.redirectView);
 router.get("/users/:id", usersController.show, usersController.showView);
 
+// Subscribers
 router.get("/subscribers", subscribersController.index, subscribersController.indexView);
 router.get("/subscribers/new", subscribersController.new);
 router.post(
@@ -78,6 +80,7 @@ router.delete(
 );
 router.get("/subscribers/:id", subscribersController.show, subscribersController.showView);
 
+// Courses
 router.get("/courses", coursesController.index, coursesController.indexView);
 router.get("/courses/new", coursesController.new);
 router.post("/courses/create", coursesController.create, coursesController.redirectView);
