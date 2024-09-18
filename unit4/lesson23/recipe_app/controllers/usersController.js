@@ -128,9 +128,10 @@ module.exports = {
   },
   authenticate: (req, res, next) => {
     User.findOne({
-      email: req.body.email
+      email: req.body.email  // Finds existing user by email
     })
       .then(user => {
+        // check if user exists and given password matches
         if (user && user.password === req.body.password) {
           res.locals.redirect = `/users/${user._id}`;
           req.flash("success", `${user.fullName}'s logged in successfully!`);
