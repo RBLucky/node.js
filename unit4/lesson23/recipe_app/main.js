@@ -14,12 +14,13 @@ const express = require("express"),
   Subscriber = require("./models/subscriber"),
   expressSession = require("express-session"),
   cookieParser = require("cookie-parser"),
+  expressValidator = require("express-validator"),
   connectFlash = require("connect-flash");
 
 mongoose.Promise = global.Promise;
 
 mongoose.connect(
-  "mongodb://localhost:27017/recipe_db",
+  "mongodb://0.0.0.0:27017/recipe_db",
   { useNewUrlParser: true }
 );
 mongoose.set("useCreateIndex", true);
@@ -67,6 +68,12 @@ router.use((req, res, next) => {
   next();
 });
 
+router.use(expressValidator());
+
+// Login
+router.get("/users/login", usersController.login);
+router.post("/users/login", usersController.authenticate, usersController.redirectView);
+
 router.use(express.json());
 router.use(homeController.logRequestPaths);
 
@@ -76,15 +83,11 @@ router.get("/contact", homeController.getSubscriptionPage);
 // Users
 router.get("/users", usersController.index, usersController.indexView);
 router.get("/users/new", usersController.new);
-router.post("/users/create", usersController.create, usersController.redirectView);
+router.post("/users/create", usersController.validate, usersController.create, usersController.redirectView);
 router.get("/users/:id/edit", usersController.edit);
 router.put("/users/:id/update", usersController.update, usersController.redirectView);
 router.delete("/users/:id/delete", usersController.delete, usersController.redirectView);
 router.get("/users/:id", usersController.show, usersController.showView);
-
-// Login
-router.get("/users/login", usersController.login);
-router.post("/users/login", usersController.authenticate, usersController.redirectView);
 
 // Subscribers
 router.get("/subscribers", subscribersController.index, subscribersController.indexView);

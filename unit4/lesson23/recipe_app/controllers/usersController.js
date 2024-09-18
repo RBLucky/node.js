@@ -127,18 +127,23 @@ module.exports = {
     res.render("users/login");
   },
   authenticate: (req, res, next) => {
-    User.findOne({
-      email: req.body.email  // Finds existing user by email
-    })
+    User.findOne({ email: req.body.email })
       .then(user => {
-        // check if user exists and given password matches
-        if (user && user.password === req.body.password) {
-          res.locals.redirect = `/users/${user._id}`;
-          req.flash("success", `${user.fullName}'s logged in successfully!`);
-          res.locals.user = user;
-          next();
+        if (user) {
+          user.passwordComparison(req.body.password)
+            .then(passwordsMatch => {
+              if (passwordsMatch) {
+                res.locals.redirect = `/users/${user._id}`;
+                req.flash("success", `${user.fullName}'s logged in successfully!`);
+                res.locals.user = user;
+              } else {
+                req.flash("error", "Failed to log in user account: Incorrect Password.");
+                res.locals.redirect = "/users/login";
+              }
+              next();
+            });
         } else {
-          req.flash("error", "Your account or password is incorrect. Please try again or contact your system administrator!");
+          req.flash("error", "Failed to log in user account: User account not found.");
           res.locals.redirect = "/users/login";
           next();
         }
@@ -147,5 +152,36 @@ module.exports = {
         console.log(`Error logging in user: ${error.message}`);
         next(error);
       });
+  },
+  validate: (req, res, next) => {
+    req
+      .sanitizeBody("email")
+      .normalizeEmail({
+        all_lowercase: true
+      })
+      .trim();
+    req.check("email", "Email is invalid").isEmail();
+    req
+      .check("zipCode", "Zip code is invalid")
+      .notEmpty()
+      .isInt()
+      .isLength({
+        min: 5,
+        max: 5
+      })
+      .equals(req.body.zipCode);
+    req.check("password", "Password cannot be empty").notEmpty();
+
+    req.getValidationResult().then((error) => {
+      if (!error.isEmpty()) {
+        let messages = error.array().map(e => e.msg);
+        req.skip = true;
+        req.flash("error", messages.join(" and "));
+        res.locals.redirect = "/users/new";
+        next();
+      } else {
+        next();
+      }
+    });
   }
 };
