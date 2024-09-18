@@ -11,7 +11,10 @@ const express = require("express"),
   subscribersController = require("./controllers/subscribersController"),
   usersController = require("./controllers/usersController"),
   coursesController = require("./controllers/coursesController"),
-  Subscriber = require("./models/subscriber");
+  Subscriber = require("./models/subscriber"),
+  expressSession = require("express-session"),
+  cookieParser = require("cookie-parser"),
+  connectFlash = require("connect-flash");
 
 mongoose.Promise = global.Promise;
 
@@ -43,6 +46,26 @@ router.use(
     methods: ["POST", "GET"]
   })
 );
+
+// Middleware Configuration
+router.use(cookieParser("secret_passcode"));
+router.use(expressSession({
+  secret: "secret_passcode",
+  cookie: {
+    maxAge: 4000000
+  },                          // Configure express-session to use cookie-parser.
+  resave: false,
+  saveUninitialized: false
+}));
+router.use(connectFlash());   // Configure your application to use connect-flash as middleware.
+
+// Assign flash messages to the
+// local flashMessages variable
+// on the response object.
+router.use((req, res, next) => {
+  res.locals.flashMessages = req.flash();
+  next();
+});
 
 router.use(express.json());
 router.use(homeController.logRequestPaths);
