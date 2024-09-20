@@ -11,11 +11,13 @@ const subscribersController = require("./controllers/subscribersController");
 const usersController = require("./controllers/usersController");
 const coursesController = require("./controllers/coursesController");
 const Subscriber = require("./models/subscriber");
+const User = require("./models/user");
 const methodOverride = require("method-override");
 const expressSession = require("express-session");
 const cookieParser = require("cookie-parser");
 const connectFlash = require("connect-flash");
-const expressValidator = require("express-validator")
+const expressValidator = require("express-validator");
+const passport = require("");
 
 mongoose.Promise = global.Promise;
 
@@ -63,6 +65,14 @@ router.use((req, res, next) => {
   res.locals.flashMessages = req.flash();
   next();
 });
+
+router.use(passport.initialize());
+router.use(passport.session());
+
+passport.use(User.createStrategy());
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 
 router.use(homeController.logRequestPaths);
 

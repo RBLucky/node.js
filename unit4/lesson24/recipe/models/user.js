@@ -2,6 +2,7 @@
 
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");//encrypt user passwords
+const passportLocalMongoose = require("passport-local-mongoose")
 const { Schema } = mongoose;
 const Subscriber = require("./subscriber");
 
@@ -86,5 +87,9 @@ userSchema.methods.passwordComparison = function (inputPassword) {
   let user = this;
   return bcrypt.compare(inputPassword, user.password);
 };
+
+userSchema.plugin(passportLocalMongoose, {
+  usernameField: "email"
+ });
 
 module.exports = mongoose.model("User", userSchema);
