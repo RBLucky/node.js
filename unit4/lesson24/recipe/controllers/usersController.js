@@ -158,5 +158,11 @@ module.exports = {
         next();
       }
     });
-  }
+  },
+  logout: (req, res, next) => {
+    req.logout();
+    req.flash("success", "You have been logged out!");
+    res.locals.redirect = "/";
+    next();
+   }
 };
