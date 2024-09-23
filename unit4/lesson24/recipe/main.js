@@ -11,13 +11,13 @@ const subscribersController = require("./controllers/subscribersController");
 const usersController = require("./controllers/usersController");
 const coursesController = require("./controllers/coursesController");
 const Subscriber = require("./models/subscriber");
-const User = require("./models/user");
 const methodOverride = require("method-override");
 const expressSession = require("express-session");
 const cookieParser = require("cookie-parser");
 const connectFlash = require("connect-flash");
 const expressValidator = require("express-validator");
 const passport = require("passport");
+const User = require("./models/user");
 
 mongoose.Promise = global.Promise;
 
@@ -59,14 +59,8 @@ router.use(expressSession({
   resave: false,
   saveUninitialized: false
 }));//session uses cookie-parser
+
 router.use(connectFlash());//flash messages
-//assign flash messages to local flashMessages variable
-router.use((req, res, next) => {
-  res.locals.loggedIn = req.isAuthenticated();
-  res.locals.currentUser = req.user;
-  res.locals.flashMessages = req.flash();
-  next();
-});
 
 router.use(passport.initialize());
 router.use(passport.session());
@@ -75,6 +69,13 @@ passport.use(User.createStrategy());
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+//assign flash messages to local flashMessages variable
+router.use((req, res, next) => {
+  res.locals.loggedIn = req.isAuthenticated();
+  res.locals.currentUser = req.user;
+  res.locals.flashMessages = req.flash();
+  next();
+});
 
 router.use(homeController.logRequestPaths);
 
@@ -84,7 +85,7 @@ router.get("/contact", homeController.getSubscriptionPage);
 //login routes
 router.get("/users/login", usersController.login);
 router.post("/users/login", usersController.authenticate, usersController.redirectView);
-router.get("/users/logout", usersController.logout, usersController.redirectView);
+router.get("/users/logout", usersController.logout, usersController.redirectView)
 
 //user routes
 router.get("/users", usersController.index, usersController.indexView);

@@ -44,18 +44,18 @@ module.exports = {
   create: (req, res, next) => {
     if (req.skip) return next();
     let newUser = new User( getUserParams(req.body) );
-    User.register(newUser, req.body.password, (error, user) => { //Register new User
+    User.register(newUser, req.body.password, (error, user) => {
     if (user) {
    req.flash("success", `${user.fullName}'s account created successfully!`);
    res.locals.redirect = "/users";
-   next(); // Set redirect for successful creation
+   next();
     } else {
    req.flash("error", `Failed to create user account because: ${error.message}.`);
    res.locals.redirect = "/users/new";
-   next(); // Set redirect and log errors in flash messages
+   next();
     }
     });
-   },
+  },
   redirectView: (req, res, next) => {
     let redirectPath = res.locals.redirect;
     if (redirectPath) res.redirect(redirectPath);
@@ -128,7 +128,7 @@ module.exports = {
   login: (req, res) => {
     res.render("users/login");
   },
-  authenticate: passport.authenticate("local", {
+  authenticate:  passport.authenticate("local", {
     failureRedirect: "/users/login",
     failureFlash: "Failed to login.",
     successRedirect: "/",

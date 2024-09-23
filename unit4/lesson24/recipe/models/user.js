@@ -1,7 +1,7 @@
 "use strict";
 
 const mongoose = require("mongoose");
-//const bcrypt = require("bcrypt");//encrypt user passwords
+const bcrypt = require("bcrypt");//encrypt user passwords
 const passportLocalMongoose = require("passport-local-mongoose")
 const { Schema } = mongoose;
 const Subscriber = require("./subscriber");
