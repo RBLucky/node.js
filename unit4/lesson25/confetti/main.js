@@ -73,6 +73,7 @@ router.get("/", homeController.index);
 
 router.get("/users", usersController.index, usersController.indexView);
 router.get("/users/new", usersController.new);
+
 router.post(
   "/users/create",
   usersController.validate,
