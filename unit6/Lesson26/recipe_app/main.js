@@ -1,23 +1,22 @@
 "use strict";
 
-const express = require("express");
-const app = express();
-const router = express.Router();
-const layouts = require("express-ejs-layouts");
-const mongoose = require("mongoose");
-const errorController = require("./controllers/errorController");
-const homeController = require("./controllers/homeController");
-const subscribersController = require("./controllers/subscribersController");
-const usersController = require("./controllers/usersController");
-const coursesController = require("./controllers/coursesController");
-const Subscriber = require("./models/subscriber");
-const methodOverride = require("method-override");
-const expressSession = require("express-session");
-const cookieParser = require("cookie-parser");
-const connectFlash = require("connect-flash");
-const expressValidator = require("express-validator");
-const passport = require("passport");
-const User = require("./models/user");
+const express = require("express"),
+  app = express(),
+  router = require("./routes/index"),
+  layouts = require("express-ejs-layouts"),
+  mongoose = require("mongoose"),
+  methodOverride = require("method-override"),
+  expressSession = require("express-session"),
+  cookieParser = require("cookie-parser"),
+  connectFlash = require("connect-flash"),
+  expressValidator = require("express-validator"),
+  passport = require("passport"),
+  errorController = require("./controllers/errorController"),
+  homeController = require("./controllers/homeController"),
+  subscribersController = require("./controllers/subscribersController"),
+  usersController = require("./controllers/usersController"),
+  coursesController = require("./controllers/coursesController"),
+  User = require("./models/user");
 
 mongoose.Promise = global.Promise;
 
