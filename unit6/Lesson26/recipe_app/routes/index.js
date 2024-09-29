@@ -1,7 +1,7 @@
 "use strict";
 
-const router = require("express").Router(),
-  userRoutes = require("./userRoutes"),
+const router = require('express').Router(),
+  userRoutes = require('./userRoutes'),
   subscriberRoutes = require("./subscriberRoutes"),
   courseRoutes = require("./courseRoutes"),
   errorRoutes = require("./errorRoutes"),
