@@ -6,7 +6,7 @@ const router = require('express').Router(),
   courseRoutes = require("./courseRoutes"),
   errorRoutes = require("./errorRoutes"),
   homeRoutes = require("./homeRoutes");
-  const apiRoutes = require("./apiToutes");
+  const apiRoutes = require("./apiRoutes");
 
 router.use("/users", userRoutes);
 router.use("/subscribers", subscriberRoutes);
