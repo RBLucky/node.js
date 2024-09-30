@@ -4,8 +4,8 @@ const mongoose = require("mongoose"),
   { Schema } = mongoose,
   Subscriber = require("./subscriber"),
   bcrypt = require("bcrypt"),
-  randToken = require("rand-token"),
   passportLocalMongoose = require("passport-local-mongoose"),
+  randToken = require("rand-token"),
   userSchema = new Schema(
     {
       name: {
@@ -24,6 +24,9 @@ const mongoose = require("mongoose"),
         lowercase: true,
         unique: true
       },
+      // apiToken: {
+      //   type: String
+      // },
       zipCode: {
         type: Number,
         min: [1000, "Zip code too short"],
@@ -40,11 +43,11 @@ const mongoose = require("mongoose"),
     }
   );
 
-userSchema.virtual("fullName").get(function () {
+userSchema.virtual("fullName").get(function() {
   return `${this.name.first} ${this.name.last}`;
 });
 
-userSchema.pre("save", function (next) {
+userSchema.pre("save", function(next) {
   let user = this;
   if (user.subscribedAccount === undefined) {
     Subscriber.findOne({
@@ -63,14 +66,14 @@ userSchema.pre("save", function (next) {
   }
 });
 
+// userSchema.pre("save", function(next) {
+//   let user = this;
+//   if (!user.apiToken) user.apiToken = randToken.generate(16);
+//   next();
+// });
+
 userSchema.plugin(passportLocalMongoose, {
   usernameField: "email"
-});
-
-userSchema.pre("save", function (next) {
-  let user = this;
-  if (!user.apiToken) user.apiToken = randToken.generate(16);
-  next();
 });
 
 module.exports = mongoose.model("User", userSchema);

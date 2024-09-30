@@ -1,7 +1,7 @@
 $(document).ready(() => {
   $("#modal-button").click(() => {
     $(".modal-body").html("");
-    $.get("/api/courses", (results = {}) => {
+    $.get("/api/courses?apiToken=recipeT0k3n", (results = {}) => {
       let data = results.data;
       if (!data || !data.courses) return;
       data.courses.forEach(course => {
