@@ -164,21 +164,21 @@ module.exports = {
     res.locals.redirect = "/";
     next();
   },
-  verifyToken: (req, res, next) => {
-    let token = req.query.apiToken;
-    if (token) {
-      User.findOne({ apiToken: token })
-        .then(user => {
-          if (user) next();
-          else next(new Error("Invalid API token."));
-        })
-        .catch(error => {
-          next(new Error(error.message));
-        });
-    } else {
-      next(new Error("Invalid API token."));
-    }
-  },
+  // verifyToken: (req, res, next) => {
+  //   let token = req.query.apiToken;
+  //   if (token) {
+  //     User.findOne({ apiToken: token })
+  //       .then(user => {
+  //         if (user) next();
+  //         else next(new Error("Invalid API token."));
+  //       })
+  //       .catch(error => {
+  //         next(new Error(error.message));
+  //       });
+  //   } else {
+  //     next(new Error("Invalid API token."));
+  //   }
+  // },
   apiAuthenticate: (req, res, next) => {
     passport.authenticate("local", (errors, user) => {
       if (user) {
@@ -199,6 +199,40 @@ module.exports = {
           message: "Could not authenticate user."
         });
     })(req, res, next);
+  },
+  verifyJWT: (req, res, next) => {
+    let token = req.headers.token;
+    if (token) {
+      jsonWebToken.verify(
+        token,
+        "secret_encoding_passphrase",
+        (errors, payload) => {
+          if (payload) {
+            User.findById(payload.data).then(user => {
+              if (user) {
+                next();
+              } else {
+                res.status(httpStatus.FORBIDDEN).json({
+                  error: true,
+                  message: "No User account found."
+                });
+              }
+            });
+          } else {
+            res.status(httpStatus.UNAUTHORIZED).json({
+              error: true,
+              message: "Cannot verify API token."
+            });
+            next();
+          }
+        }
+      );
+    } else {
+      res.status(httpStatus.UNAUTHORIZED).json({
+        error: true,
+        message: "Provide Token"
+      });
+    }
   }
 };
 
