@@ -3,6 +3,7 @@
 const User = require("../models/user"),
   passport = require("passport"),
   token = process.env.TOKEN || "recipeT0k3n",
+  jsonWebToken = require("jsonwebtoken"),
   getUserParams = body => {
     return {
       name: {
@@ -177,5 +178,26 @@ module.exports = {
     } else {
       next(new Error("Invalid API token."));
     }
+  },
+  apiAuthenticate: (req, res, next) => {
+    passport.authenticate("local", (errors, user) => {
+      if (user) {
+        let signedToken = jsonWebToken.sign(
+          {
+            data: user._id,
+            exp: new Date().setDate(new Date().getDate() + 1)
+          },
+          "secret_encoding_passphrase"
+        );
+        res.json({
+          success: true,
+          token: signedToken
+        });
+      } else
+        res.json({
+          success: false,
+          message: "Could not authenticate user."
+        });
+    })(req, res, next);
   }
 };
