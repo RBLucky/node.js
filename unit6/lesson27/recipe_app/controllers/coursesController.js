@@ -1,6 +1,8 @@
 "use strict";
 
-const Course = require("../models/course");
+const Course = require("../models/course"),
+  httpStatus = require("http-status-codes"),
+  User = require("../models/user");
 
 module.exports = {
   index: (req, res, next) => {
@@ -15,11 +17,7 @@ module.exports = {
       });
   },
   indexView: (req, res) => {
-    if (req.query.format === "json") {
-      res.json(res.locals.courses);
-    } else {
-      res.render("courses/index");
-    }
+    res.render("courses/index");
   },
   new: (req, res) => {
     res.render("courses/new");
@@ -116,7 +114,6 @@ module.exports = {
     if (redirectPath !== undefined) res.redirect(redirectPath);
     else next();
   },
-
   respondJSON: (req, res) => {
     res.json({
       status: httpStatus.OK,
@@ -161,8 +158,8 @@ module.exports = {
   filterUserCourses: (req, res, next) => {
     let currentUser = res.locals.currentUser;
     if (currentUser) {
-      let mappedCourses = res.locals.courses.map((course) => {
-        let userJoined = currentUser.courses.some((userCourse) => {
+      let mappedCourses = res.locals.courses.map(course => {
+        let userJoined = currentUser.courses.some(userCourse => {
           return userCourse.equals(course._id);
         });
         return Object.assign(course.toObject(), { joined: userJoined });
